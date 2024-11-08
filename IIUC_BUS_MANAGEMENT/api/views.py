@@ -89,4 +89,55 @@ def driver_insert(request):
             return Response({"message": "Post called but error", "error": error});
 
 
+# Bus 
 
+@api_view(['GET','POST'])
+def bus_view(request):
+     if request.method == "GET":
+        try:
+            page = request.GET.get("page",1)
+            limit = request.GET.get("limit", 5)
+
+            database.cur.execute("""
+                select bus_view(%s, %s);
+            """,(page,limit))
+            result = json.loads(json.dumps(database.cur.fetchone()[0]))
+
+            database.conn.commit()
+            return Response({
+                "data": result
+            }
+            )
+
+
+        except(Exception, database.Error) as error:
+            database.conn.commit()
+            print(error)
+            return Response({"message": "GET called but error", "error": error});
+
+
+# Trip 
+
+@api_view(['GET','POST'])
+def trip_view(request):
+    if request.method == "GET":
+        try:
+            page = request.GET.get("page",1)
+            limit = request.GET.get("limit", 5)
+
+            database.cur.execute("""
+                select trip_all(%s, %s);
+            """,(page,limit))
+            result = json.loads(json.dumps(database.cur.fetchone()[0]))
+
+            database.conn.commit()
+            return Response({
+                "data": result
+            }
+            )
+
+
+        except(Exception, database.Error) as error:
+            database.conn.commit()
+            print(error)
+            return Response({"message": "GET called but error", "error": error});

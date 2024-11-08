@@ -144,6 +144,32 @@ def total_distance(request):
             print(error)
             return Response({"message": "GET called but error", "error": error});
 
+@api_view(['GET','POST'])
+def efficiency(request):
+     if request.method == "GET":
+        try:
+            page = request.GET.get("page",1)
+            limit = request.GET.get("limit", 20)
+            oil = request.GET.get("oil",40)
+            # print(oil);
+            database.cur.execute("""
+                select efficiency(%s, %s,%s );
+            """,(page,limit,oil,))
+            result = json.loads(json.dumps(database.cur.fetchone()[0]))
+
+            database.conn.commit()
+            # print(oil);
+            return Response({
+                "data": result
+            }
+            )
+
+
+        except(Exception, database.Error) as error:
+            database.conn.commit()
+            print(error)
+            return Response({"message": "GET called but error", "error": error});
+
 # Trip 
 
 @api_view(['GET','POST'])
@@ -151,7 +177,7 @@ def trip_view(request):
     if request.method == "GET":
         try:
             page = request.GET.get("page",1)
-            limit = request.GET.get("limit", 5)
+            limit = request.GET.get("limit", 20)
 
             database.cur.execute("""
                 select trip_all(%s, %s);
@@ -169,7 +195,6 @@ def trip_view(request):
             database.conn.commit()
             print(error)
             return Response({"message": "GET called but error", "error": error});
-
 
 
 @api_view(['GET','POST'])
@@ -197,4 +222,56 @@ def trip_insert(request):
             print(error)
             return Response({"message": "Post called but error", "error": error});
 
+@api_view(['GET','POST'])
+def look_like(request):
+    if request.method == "GET":
+        
+        try:
+            page = request.GET.get("page",1)
+            limit = request.GET.get("limit", 20)
+            context = request.GET.get("context",'B')
+            search_key = request.GET.get("search_key",'B')
+            search_key = str(search_key)
+            print(search_key)
+            database.cur.execute("""
+                select search_look_alike_bus2(%s, %s, %s);
+            """,(page, limit, search_key))
+            result = json.loads(json.dumps(database.cur.fetchone()[0]))
+            database.conn.commit()
+            
 
+            return Response({
+                "data": result
+            }
+            )
+        except(Exception, database.Error) as error:
+            database.conn.commit()
+            print(error)
+            return Response({"message": "Post called but error", "error": error});
+
+
+
+
+@api_view(['GET','POST'])
+def trip_view(request):
+    if request.method == "GET":
+        try:
+            page = request.GET.get("page",1)
+            limit = request.GET.get("limit", 20)
+
+            database.cur.execute("""
+                select trip_all(%s, %s);
+            """,(page,limit))
+            result = json.loads(json.dumps(database.cur.fetchone()[0]))
+
+            database.conn.commit()
+            return Response({
+                "data": result
+            }
+            )
+
+
+        except(Exception, database.Error) as error:
+            database.conn.commit()
+            print(error)
+            return Response({"message": "GET called but error", "error": error});

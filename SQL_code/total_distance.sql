@@ -14,10 +14,6 @@ BEGIN
 				from trip natural join route
 			where trip.date >= fromm and trip.date<= too
 			group by bus_id
-			
-			
-			LIMIT _limit
-			OFFSET (_page - 1) * _limit
 		) u
 	)::JSON;
 	

@@ -88,6 +88,33 @@ def driver_insert(request):
             print(error)
             return Response({"message": "Post called but error", "error": error});
 
+@api_view(['GET','POST'])
+def total_distance2(request):
+    if request.method == "POST":
+        try:
+            body = json.dumps(json.loads(request.body))
+            print(body)
+            
+            database.cur.execute("""
+                select total_distance3(%s) ;
+            """,(body,))
+            result = json.loads(json.dumps(database.cur.fetchone()[0]))
+            database.conn.commit()
+            
+            print(result)
+
+            return Response(
+                {
+
+                    "message": "success",
+                    "date":result
+                }
+            )
+        except(Exception, database.Error) as error:
+            database.conn.commit()
+            print(error)
+            return Response({"message": "Post called but error", "error": error});
+
 
 # Bus 
 
@@ -224,7 +251,7 @@ def trip_insert(request):
 
 @api_view(['GET','POST'])
 def look_like(request):
-    if request.method == "GET":
+    if request.method == "POST":
         
         try:
             page = request.GET.get("page",1)

@@ -9,6 +9,7 @@ urlpatterns = [
     # Bus
     path('bus_view',views.bus_view,name="bus_view"),
     path('total_distance',views.total_distance,name="total_distance"),
+    path('total_distance2',views.total_distance2,name="total_distance2"),
     path('efficiency',views.efficiency,name="efficiency"),
     # Trip
     path('trip_view',views.trip_view,name="trip_view"),

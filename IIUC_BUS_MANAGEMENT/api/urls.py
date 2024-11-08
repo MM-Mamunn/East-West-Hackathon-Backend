@@ -8,8 +8,10 @@ urlpatterns = [
     path('dashboard',views.Dashboard,name="dashboard"),
     # Bus
     path('bus_view',views.bus_view,name="bus_view"),
+    path('total_distance',views.total_distance,name="total_distance"),
     # Trip
     path('trip_view',views.trip_view,name="trip_view"),
+    path('trip_insert',views.trip_insert,name="trip_insert"),
     
 
 ]
